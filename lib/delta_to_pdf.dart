@@ -5,6 +5,7 @@
 
 library delta_to_pdf;
 
+import 'package:flutter_quill/quill_delta.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter_quill/flutter_quill.dart' as fq;
@@ -102,7 +103,7 @@ class DeltaToPDF {
 
   /// [Description]  main wrapper to convert delta to pdf
   /// [Returns] pdf widget object
-  deltaToPDF(List<fq.Operation> deltaList) {
+  deltaToPDF(List<Operation> deltaList) {
     List header = [null, null];
     List texts = [];
     List pdfColumnWidget = [];
