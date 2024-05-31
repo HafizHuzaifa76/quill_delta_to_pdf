@@ -1,7 +1,11 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:delta_to_pdf/delta_to_pdf.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:pdf/widgets.dart' as pwWidgets;
 import 'package:flutter_quill/flutter_quill.dart' as fq;
 import 'package:open_app_file/open_app_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -129,13 +133,23 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final pdf = pw.Document();
+          final Uint8List imageBytes = await loadImageBytes('assets/images/page1.jpg');
+          final image = pw.MemoryImage(imageBytes);
           pdf.addPage(pw.Page(
               pageFormat: PdfPageFormat.a4,
               margin: pw.EdgeInsets.zero,
               build: (pw.Context context) {
                 var delta = _controller.document.toDelta().toList();
                 DeltaToPDF dpdf = DeltaToPDF();
-                return dpdf.deltaToPDF(delta);
+                return pwWidgets.Container(
+                    decoration: pwWidgets.BoxDecoration(
+                      image: pwWidgets.DecorationImage(
+                        image: image,
+                        fit: pwWidgets.BoxFit.cover, // Adjust the fit of the image as needed
+                      ),
+                    ),
+                  child: dpdf.deltaToPDF(delta)
+                );
               }));
           final output = await getApplicationDocumentsDirectory();
           final file = File("${output.path}/document.pdf");
@@ -148,5 +162,42 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  Future<pwWidgets.Widget> buildPdfPage(pw.Context context) async {
+    var delta = _controller.document.toDelta().toList();
+    DeltaToPDF dpdf = DeltaToPDF();
+
+    // Create a stack with the background image and the content
+    return pwWidgets.Stack(
+      children: [
+        await buildBackgroundImage(), // Add background image
+        pwWidgets.Positioned.fill(
+          child: dpdf.deltaToPDF(delta), // Add your document content
+        ),
+      ],
+    );
+  }
+
+  Future<pwWidgets.Widget> buildBackgroundImage() async {
+    // Load your image from assets or network
+
+    final Uint8List imageBytes = await loadImageBytes('assets/images/page1.jpg');
+    final image = pw.MemoryImage(imageBytes);
+
+    // Return a widget with the background image
+    return pwWidgets.Container(
+      decoration: pwWidgets.BoxDecoration(
+        image: pwWidgets.DecorationImage(
+          image: image,
+          fit: pwWidgets.BoxFit.cover, // Adjust the fit of the image as needed
+        ),
+      ),
+    );
+  }
+
+  Future<Uint8List> loadImageBytes(String assetName) async {
+    final ByteData data = await rootBundle.load(assetName);
+    return data.buffer.asUint8List();
   }
 }

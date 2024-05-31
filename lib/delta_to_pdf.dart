@@ -71,17 +71,21 @@ class DeltaToPDF {
       attribute!.forEach((key, value) {
         switch (key) {
           case "color":
-            fontColor = PdfColor.fromHex(value);
+            fontColor = PdfColor.fromInt(value);
             break;
           case "bold":
             fontWeight = pw.FontWeight.bold;
             break;
           case "italic":
             fontStyle = pw.FontStyle.italic;
+            fontStyle = pw.FontStyle.italic;
             break;
           case "underline":
             decoration = pw.TextDecoration.underline;
             break;
+          // case "underline":
+          //   decoration = pw.WrapAlignment();
+          //   break;
           case "strike":
             decoration = pw.TextDecoration.lineThrough;
             break;
@@ -98,6 +102,7 @@ class DeltaToPDF {
             fontSize: fontSize,
             decoration: decoration,
             background: boxDecoration,
+            font: pw.Font.timesItalic(),
             fontFallback: [pw.Font.symbol()]));
   }
 
