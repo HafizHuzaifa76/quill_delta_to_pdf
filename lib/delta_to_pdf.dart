@@ -104,7 +104,7 @@ class DeltaToPDF {
             fontSize: fontSize,
             decoration: decoration,
             background: boxDecoration,
-            font: pw.Font.HandWritingFont1(),
+            font: pw.Font.TitleFont1(),
             fontFallback: [pw.Font.symbol()]),
     );
   }
