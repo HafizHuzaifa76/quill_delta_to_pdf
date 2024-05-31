@@ -137,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
           final image = pw.MemoryImage(imageBytes);
           pdf.addPage(pw.Page(
               pageFormat: PdfPageFormat.a4,
-              margin: pw.EdgeInsets.zero,
+              margin: pw.EdgeInsets.all(10),
               build: (pw.Context context) {
                 var delta = _controller.document.toDelta().toList();
                 DeltaToPDF dpdf = DeltaToPDF();

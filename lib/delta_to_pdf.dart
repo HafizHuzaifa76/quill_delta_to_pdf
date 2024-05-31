@@ -37,6 +37,7 @@ class DeltaToPDF {
   getHeaderAttributedText(
       Map<String, dynamic>? attribute, String text, bool hasAttribute) {
     pw.FontWeight fontWeight = pw.FontWeight.normal;
+    pw.Alignment alignment = pw.Alignment.center;
     double fontSize = 14;
     if (hasAttribute) {
       attribute!.forEach((key, value) {
@@ -56,7 +57,7 @@ class DeltaToPDF {
         }
       });
     }
-    return [fontWeight, fontSize];
+    return [fontWeight, fontSize, alignment];
   }
 
   /// [Description]  converts header attributed text
@@ -94,6 +95,7 @@ class DeltaToPDF {
         }
       });
     }
+
     return pw.Text(text,
         style: pw.TextStyle(
             color: fontColor,
@@ -102,8 +104,9 @@ class DeltaToPDF {
             fontSize: fontSize,
             decoration: decoration,
             background: boxDecoration,
-            font: pw.Font.timesItalic(),
-            fontFallback: [pw.Font.symbol()]));
+            font: pw.Font.HandWritingFont1(),
+            fontFallback: [pw.Font.symbol()]),
+    );
   }
 
   /// [Description]  main wrapper to convert delta to pdf
